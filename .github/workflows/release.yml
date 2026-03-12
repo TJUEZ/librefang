@@ -97,6 +97,46 @@ jobs:
           rm -f $RUNNER_TEMP/certificate.p12
 
       - name: Build and bundle Tauri desktop app
+        if: runner.os != 'macOS' || env.APPLE_SIGNING_IDENTITY == ''
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "LibreFang ${{ github.ref_name }}"
+          releaseBody: |
+            ## What's New
+
+            See the [CHANGELOG](https://github.com/librefang/librefang/blob/main/CHANGELOG.md) for full details.
+
+            ## Installation
+
+            **Desktop App** — Download the installer for your platform below.
+
+            **CLI (Linux/macOS)**:
+            ```bash
+            curl -fsSL https://librefang.ai/install.sh | sh
+            ```
+
+            **Docker**:
+            ```bash
+            docker pull ghcr.io/librefang/librefang:latest
+            ```
+
+            **Coming from OpenClaw?**
+            ```bash
+            librefang migrate --from openclaw
+            ```
+          releaseDraft: false
+          prerelease: false
+          includeUpdaterJson: true
+          projectPath: crates/librefang-desktop
+          args: ${{ matrix.platform.args }}
+
+      - name: Build and bundle Tauri desktop app (signed macOS)
+        if: runner.os == 'macOS' && env.APPLE_SIGNING_IDENTITY != ''
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
