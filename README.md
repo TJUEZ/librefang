@@ -7,7 +7,7 @@
 
 <p align="center">
   Open-source Agent OS built in Rust. 137K LOC. 14 crates. 1,767+ tests. Zero clippy warnings.<br/>
-  <strong>Transparent governance. Preserved attribution. Compatible with the existing `openfang` CLI.</strong>
+  <strong>Forked from `RightNow-AI/openfang`. Transparent governance. Preserved attribution. Compatible with the existing `openfang` CLI.</strong>
 </p>
 
 <p align="center">
@@ -27,9 +27,11 @@
 
 ---
 
-> **LibreFang is a community-maintained fork of OpenFang.**
+> **LibreFang is a community-maintained fork of [`RightNow-AI/openfang`](https://github.com/RightNow-AI/openfang).**
 >
-> The codebase, binary, crate names, and config paths still use `openfang` for compatibility during the transition. LibreFang's project policy is different: external contributions are expected to be reviewed in public, merged when accepted, and credited when adapted.
+> The codebase, binary, crate names, and config paths still use `openfang` for compatibility during the transition. LibreFang is taking a different path on project governance: we actively accept community contributions, review them in public, merge accepted work through normal GitHub flow, and preserve contributor credit when code is adapted.
+
+> **Community status:** issues, pull requests, reviewers, and maintainers are actively welcome.
 
 ---
 
@@ -71,7 +73,9 @@ irm https://librefang.ai/install.ps1 | iex
 
 ## Community Fork Commitments
 
+- LibreFang exists to continue the OpenFang codebase as an open community fork with normal GitHub collaboration.
 - Pull requests are reviewed in the open. If a change is accepted, it should land as a merge or squash merge whenever possible.
+- Community contributions are actively encouraged, including bug fixes, documentation, tests, packaging, release engineering, and maintainer help.
 - If a maintainer adapts or rewrites a contributor's patch, attribution is preserved in commit metadata and release notes.
 - Governance, maintainer responsibilities, and escalation paths are documented in [`GOVERNANCE.md`](GOVERNANCE.md) and [`MAINTAINERS.md`](MAINTAINERS.md).
 - Security reports go through the private process in [`SECURITY.md`](SECURITY.md), not public issues.
