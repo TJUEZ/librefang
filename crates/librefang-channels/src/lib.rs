@@ -49,6 +49,5 @@ pub mod gotify;
 pub mod linkedin;
 pub mod mumble;
 pub mod ntfy;
-pub mod qq;
 pub mod webhook;
 pub mod wecom;
