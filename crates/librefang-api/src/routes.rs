@@ -11305,9 +11305,8 @@ static VALID_EVENT_TYPES: &[&str] = &[
 ];
 
 /// In-memory store for event webhook subscriptions.
-static EVENT_WEBHOOKS: LazyLock<
-    tokio::sync::RwLock<HashMap<String, serde_json::Value>>,
-> = LazyLock::new(|| tokio::sync::RwLock::new(HashMap::new()));
+static EVENT_WEBHOOKS: LazyLock<tokio::sync::RwLock<HashMap<String, serde_json::Value>>> =
+    LazyLock::new(|| tokio::sync::RwLock::new(HashMap::new()));
 
 /// GET /api/webhooks/events — List all event webhook subscriptions.
 pub async fn list_event_webhooks() -> impl IntoResponse {
@@ -11317,9 +11316,7 @@ pub async fn list_event_webhooks() -> impl IntoResponse {
 }
 
 /// POST /api/webhooks/events — Create a new event webhook subscription.
-pub async fn create_event_webhook(
-    Json(req): Json<serde_json::Value>,
-) -> impl IntoResponse {
+pub async fn create_event_webhook(Json(req): Json<serde_json::Value>) -> impl IntoResponse {
     let url = match req["url"].as_str() {
         Some(u) if !u.is_empty() => u.to_string(),
         _ => {
@@ -11391,7 +11388,10 @@ pub async fn create_event_webhook(
         "created_at": chrono::Utc::now().to_rfc3339(),
     });
 
-    EVENT_WEBHOOKS.write().await.insert(id.clone(), webhook.clone());
+    EVENT_WEBHOOKS
+        .write()
+        .await
+        .insert(id.clone(), webhook.clone());
 
     (StatusCode::CREATED, Json(webhook))
 }
@@ -11470,9 +11470,7 @@ pub async fn update_event_webhook(
 }
 
 /// DELETE /api/webhooks/events/{id} — Remove an event webhook subscription.
-pub async fn delete_event_webhook(
-    Path(id): Path<String>,
-) -> impl IntoResponse {
+pub async fn delete_event_webhook(Path(id): Path<String>) -> impl IntoResponse {
     let mut store = EVENT_WEBHOOKS.write().await;
     if store.remove(&id).is_some() {
         (

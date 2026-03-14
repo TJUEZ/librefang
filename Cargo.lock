@@ -3535,6 +3535,7 @@ dependencies = [
  "dashmap",
  "futures",
  "governor",
+ "http-body-util",
  "librefang-channels",
  "librefang-extensions",
  "librefang-hands",
