@@ -561,7 +561,7 @@ pub async fn build_router(
         )
         .route(
             "/api/cron/jobs/{id}",
-            axum::routing::delete(routes::delete_cron_job),
+            axum::routing::delete(routes::delete_cron_job).put(routes::update_cron_job),
         )
         .route(
             "/api/cron/jobs/{id}/enable",

@@ -9876,6 +9876,36 @@ pub async fn delete_cron_job(
     }
 }
 
+/// PUT /api/cron/jobs/{id} — Update a cron job's configuration.
+pub async fn update_cron_job(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+    Json(body): Json<serde_json::Value>,
+) -> impl IntoResponse {
+    match uuid::Uuid::parse_str(&id) {
+        Ok(uuid) => {
+            let job_id = librefang_types::scheduler::CronJobId(uuid);
+            match state.kernel.cron_scheduler.update_job(job_id, &body) {
+                Ok(job) => {
+                    let _ = state.kernel.cron_scheduler.persist();
+                    (
+                        StatusCode::OK,
+                        Json(serde_json::to_value(&job).unwrap_or_default()),
+                    )
+                }
+                Err(e) => (
+                    StatusCode::NOT_FOUND,
+                    Json(serde_json::json!({"error": format!("{e}")})),
+                ),
+            }
+        }
+        Err(_) => (
+            StatusCode::BAD_REQUEST,
+            Json(serde_json::json!({"error": "Invalid job ID"})),
+        ),
+    }
+}
+
 /// PUT /api/cron/jobs/{id}/enable — Enable or disable a cron job.
 pub async fn toggle_cron_job(
     State(state): State<Arc<AppState>>,
