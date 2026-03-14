@@ -99,7 +99,7 @@ librefang start
 
 **Or run with Docker:**
 ```bash
-docker compose up --build
+docker run -p 4545:4545 ghcr.io/librefang/librefang
 # Dashboard live at http://localhost:4545
 ```
 
