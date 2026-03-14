@@ -315,6 +315,19 @@ pub async fn build_router(
             "/api/workflows",
             axum::routing::get(routes::list_workflows).post(routes::create_workflow),
         )
+        // Workflow template endpoints (literal paths before {id} captures)
+        .route(
+            "/api/workflows/templates",
+            axum::routing::get(routes::list_workflow_templates),
+        )
+        .route(
+            "/api/workflows/templates/{id}",
+            axum::routing::get(routes::get_workflow_template),
+        )
+        .route(
+            "/api/workflows/from-template",
+            axum::routing::post(routes::create_workflow_from_template),
+        )
         .route(
             "/api/workflows/{id}/run",
             axum::routing::post(routes::run_workflow),
@@ -322,6 +335,10 @@ pub async fn build_router(
         .route(
             "/api/workflows/{id}/runs",
             axum::routing::get(routes::list_workflow_runs),
+        )
+        .route(
+            "/api/workflows/{id}/save-as-template",
+            axum::routing::post(routes::save_workflow_as_template),
         )
         // Skills endpoints
         .route("/api/skills", axum::routing::get(routes::list_skills))
