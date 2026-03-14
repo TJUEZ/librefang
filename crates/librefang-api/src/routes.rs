@@ -1,5 +1,6 @@
 //! Route handlers for the LibreFang API.
 
+use crate::middleware::RequestLanguage;
 use crate::types::*;
 use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
@@ -14,10 +15,24 @@ use librefang_kernel::LibreFangKernel;
 use librefang_runtime::kernel_handle::KernelHandle;
 use librefang_runtime::tool_runner::builtin_tool_definitions;
 use librefang_types::agent::{AgentId, AgentIdentity, AgentManifest};
+use librefang_types::i18n::{self, ErrorTranslator};
 use std::collections::HashMap;
 use std::net::IpAddr;
 use std::sync::{Arc, LazyLock};
 use std::time::Instant;
+
+/// Extract an [`ErrorTranslator`] from the request extensions.
+///
+/// Uses the language resolved by the `accept_language` middleware, or falls
+/// back to English if the middleware hasn't run (e.g. in tests).
+#[allow(dead_code)]
+pub(crate) fn translator_from_extensions(extensions: &axum::http::Extensions) -> ErrorTranslator {
+    let lang = extensions
+        .get::<RequestLanguage>()
+        .map(|rl| rl.0)
+        .unwrap_or(i18n::DEFAULT_LANGUAGE);
+    ErrorTranslator::new(lang)
+}
 
 /// Shared application state.
 ///
